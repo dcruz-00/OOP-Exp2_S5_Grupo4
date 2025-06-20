@@ -22,15 +22,19 @@ public class Libro {
     public int getIndiceLibro() {
         return indiceLibro;
     }
+
     public String getNombre() {
         return nombre;
     }
+
     public String getAutor() {
         return autor;
     }
+
     public boolean isDisponible() {
         return disponible;
     }
+
     public String getRutPrestamista() {
         return rutPrestamista;
     }
@@ -51,14 +55,32 @@ public class Libro {
     public void setDisponible(Boolean disponible) {
         this.disponible = disponible;
     }
-    
+
     public void prestarA(String rut) {
         this.disponible = false;
         this.rutPrestamista = rut;
     }
-    
+
     public void devolver() {
         this.disponible = true;
         this.rutPrestamista = null;
-    }    
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Libro)) {
+            return false;
+        }
+        Libro otro = (Libro) obj;
+        return this.indiceLibro == otro.indiceLibro;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(indiceLibro);
+    }
+
 }

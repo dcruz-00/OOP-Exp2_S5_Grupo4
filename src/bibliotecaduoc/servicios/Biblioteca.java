@@ -5,13 +5,11 @@ import bibliotecaduoc.modelos.Libro;
 import bibliotecaduoc.excepciones.LibroNoEncontradoException;
 import bibliotecaduoc.excepciones.LibroYaPrestadoException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.TreeSet;
 
@@ -19,7 +17,7 @@ public class Biblioteca {
 
     private static final HashMap<String, Usuario> usuarios = new HashMap<>();
     private final Scanner scanner = new Scanner(System.in);
-    ArrayList<Libro> libros = new ArrayList<>();
+    private ArrayList<Libro> libros = new ArrayList<>();
 
     public Biblioteca() {
         libros.add(new Libro(1, "Las Aventuras de Duco", "Emilia Acevedo", true));
@@ -36,10 +34,9 @@ public class Biblioteca {
 
     public void mostrarLibros() {
         System.out.println("\n=== LISTA DE NUESTROS LIBROS ===");
-        // Se crea en el momento para que la colección no este vacía
         TreeSet<Libro> biblioteca = new TreeSet<>(Comparator.comparing(Libro::getIndiceLibro));
         biblioteca.addAll(libros);
-        
+
         for (Libro libro : biblioteca) {
             System.out.println("------------------------");
             System.out.println("NOMBRE: " + libro.getNombre());
@@ -107,13 +104,16 @@ public class Biblioteca {
     public void generarInforme() {
         String archivoSalida = "informe_usuarios.txt";
 
+        
+
         try (FileWriter writer = new FileWriter(archivoSalida)) {
             writer.write("\n=== INFORME DE USUARIOS ===\n");
             
-            HashSet<Usuario> usuariosRegistrados = new HashSet<>(usuarios.values());
-            System.out.println("Cantidad de usuarios: " + usuariosRegistrados.size());
-
-            for (Usuario usuario : usuariosRegistrados) {
+            TreeSet<Usuario> usuariosOrdenados = new TreeSet<>(Comparator.comparing(Usuario::getNombreCompleto));
+            
+            usuariosOrdenados.addAll(Usuario.getUsuarios().values());
+        
+            for (Usuario usuario : usuariosOrdenados) {
                 writer.write("Usuario: " + usuario.getNombreCompleto() + " [" + usuario.getRut() + "]\n");
 
                 ArrayList<Libro> libros = usuario.getLibrosPrestados();
